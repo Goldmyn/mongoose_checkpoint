@@ -29,6 +29,7 @@ async function connectDB() {
     // findById();
     // findOneByIdAndUpdate();
     // findOnePersonAndUpdate();
+    // findPersonByIdAndDelete();
   } catch (error) {
     console.log(error); // Log any connection errors
   }
@@ -151,6 +152,17 @@ async function findOnePersonAndUpdate() {
       { new: true }
     );
     console.log(personName);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function findPersonByIdAndDelete() {
+  try {
+    const deletedPerson = await Person.findByIdAndDelete({
+      _id: "6734f8294b3b7ed5f8174cea",
+    });
+    console.log(deletedPerson);
   } catch (error) {
     console.log(error);
   }
