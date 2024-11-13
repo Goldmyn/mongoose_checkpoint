@@ -22,14 +22,14 @@ async function connectDB() {
     console.log("Connected to DB"); // Log success message
 
     // Example function calls (uncomment to use)
-    createUser();
-    manyUser();
-    findPeopleByName();
-    findOneByFavoriteFood();
-    findById();
-    findOneByIdAndUpdate();
-    findOnePersonAndUpdate();
-    findPersonByIdAndDelete();
+    // createUser();
+    // manyUser();
+    // findPeopleByName();
+    // findOneByFavoriteFood();
+    // findById();
+    // findOneByIdAndUpdate();
+    // findOnePersonAndUpdate();
+    // findPersonByIdAndDelete();
   } catch (error) {
     console.log(error); // Log any connection errors
   }
