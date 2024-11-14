@@ -13,15 +13,16 @@ async function connectDB() {
     // Connect to the database using the connection URI stored in environment variables
     await mongoose.connect(
       process.env.MONGO_URI
-      /* Uncomment the below options if needed for connection settings
+      /* Uncomment the below options if needed for connection settings, I was getting errors so i turned it to a comment 
       , {
-        useNewUrlParser: true, // Use the new URL string parser
-        useUnifiedTopology: true, // Use the new topology engine
+        useNewUrlParser: true, 
+        useUnifiedTopology: true, 
       }*/
     );
     console.log("Connected to DB"); // Log success message
 
-    // Example function calls (uncomment to use)
+    // All Database function calls (uncomment the needed to use)
+
     // createUser();
     // manyUser();
     // findPeopleByName();
@@ -30,6 +31,8 @@ async function connectDB() {
     // findOneByIdAndUpdate();
     // findOnePersonAndUpdate();
     // findPersonByIdAndDelete();
+    // deleteManyByName();
+    // findPeopleWhoLikeBurritos();
   } catch (error) {
     console.log(error); // Log any connection errors
   }
@@ -89,6 +92,16 @@ async function manyUser() {
       age: 36,
       favoriteFoods: ["Noodles", "Apple"],
     },
+    {
+      name: "Mary Crane",
+      age: 33,
+      favoriteFoods: ["Pizza", "Chicken"],
+    },
+    {
+      name: "Linda Mary",
+      age: 35,
+      favoriteFoods: ["Sharwama", "Beef"],
+    },
   ];
 
   try {
@@ -102,7 +115,7 @@ async function manyUser() {
 // Function to find people by name from the database
 async function findPeopleByName() {
   try {
-    const people = await Person.find({ name: "Mandy Kugo" }); // Find people with the given name
+    const people = await Person.find({ name: new RegExp("Mandy Kugo", "i") }); // Find people with the given name
     console.log(people); // Log the found people
   } catch (err) {
     console.error("Error finding people by name:", err); // Log any errors
@@ -112,7 +125,9 @@ async function findPeopleByName() {
 // Function to find one person by their favorite food
 async function findOneByFavoriteFood() {
   try {
-    const person = await Person.findOne({ favoriteFoods: "Apple" }); // Find a person by a specific favorite food
+    const person = await Person.findOne({
+      favoriteFoods: new RegExp("apple", "i"),
+    }); // Find a person by a specific favorite food
     console.log(person); // Log the found person
   } catch (err) {
     console.error(err); // Log any errors
@@ -142,29 +157,68 @@ async function findOneByIdAndUpdate() {
   }
 }
 
-// Function to Find and update by ID
-
+// Function to find a person by name and update their age
 async function findOnePersonAndUpdate() {
   try {
+    // Use case-insensitive regex to find the person by name "Edward Ben"
     const personName = await Person.findOneAndUpdate(
-      { name: "Edward Ben" },
-      { age: 20 },
-      { new: true }
+      { name: new RegExp("Edward Ben", "i") }, // Find by name, case insensitive
+      { age: 20 }, // Update the age to 20
+      { new: true } // Return the updated document
     );
+
+    // Log the updated person object
     console.log(personName);
   } catch (error) {
+    // Log any errors that occur
     console.log(error);
   }
 }
 
+// Function to find a person by their ID and delete them
 async function findPersonByIdAndDelete() {
   try {
+    // Find the person by their ID and delete them from the database
     const deletedPerson = await Person.findByIdAndDelete({
-      _id: "6734f8294b3b7ed5f8174cea",
+      _id: "6734f8294b3b7ed5f8174cea", // Specify the ID of the person to delete
     });
+
+    // Log the deleted person object
     console.log(deletedPerson);
   } catch (error) {
+    // Log any errors that occur
     console.log(error);
+  }
+}
+
+// Function to delete multiple people by name
+async function deleteManyByName() {
+  try {
+    // Use case-insensitive regex to delete all persons with name "Mary"
+    const toBeDeleted = await Person.deleteMany({
+      name: new RegExp(/Mary/, "i"), // Specify the name pattern to match, case insensitive
+    });
+
+    // Log the result of the deletion operation
+    console.log(toBeDeleted);
+  } catch (error) {
+    // Log any errors that occur
+    console.log(error);
+  }
+}
+
+async function findPeopleWhoLikeBurritos() {
+  try {
+    const results = await Person.find({
+      favoriteFoods: new RegExp("burritos", "i"),
+    }) // Find people who like burritos
+      .sort({ name: 1 }) // Sort by name in ascending order
+      .limit(2) // Limit the results to 2
+      .select("-age"); // Only select the name field while excluding the age field
+
+    console.log("People who like burritos:", results);
+  } catch (error) {
+    console.error("Error finding people who like burritos:", error); // Log any errors encountered
   }
 }
 
