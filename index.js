@@ -26,11 +26,11 @@ async function connectDB() {
     // createUser();
     // manyUser();
     // findPeopleByName();
-    // findOneByFavoriteFood();
-    // findById();
-    // findOneByIdAndUpdate();
+    // findOneByFavoriteFood("apple");
+    // findById("6734f8294b3b7ed5f8174ce9");
+    // findOneByIdAndUpdate("6734f8294b3b7ed5f8174ce8");
     // findOnePersonAndUpdate();
-    // findPersonByIdAndDelete();
+    // findPersonByIdAndDelete("6734f8294b3b7ed5f8174cea");
     // deleteManyByName();
     // findPeopleWhoLikeBurritos();
   } catch (error) {
@@ -117,27 +117,27 @@ async function findPeopleByName() {
   try {
     const people = await Person.find({ name: new RegExp("Mandy Kugo", "i") }); // Find people with the given name
     console.log(people); // Log the found people
-  } catch (err) {
-    console.error("Error finding people by name:", err); // Log any errors
+  } catch (error) {
+    console.error("Error finding people by name:", error); // Log any errors
   }
 }
 
 // Function to find one person by their favorite food
-async function findOneByFavoriteFood() {
+async function findOneByFavoriteFood(food) {
   try {
     const person = await Person.findOne({
-      favoriteFoods: new RegExp("apple", "i"),
+      favoriteFoods: new RegExp(food, "i"), // Use the food argument for the search
     }); // Find a person by a specific favorite food
     console.log(person); // Log the found person
-  } catch (err) {
-    console.error(err); // Log any errors
+  } catch (error) {
+    console.error(error); // Log any errors
   }
 }
 
 // Function to find a person by their ID
-async function findById() {
+async function findById(personId) {
   try {
-    const person = await Person.findById({ _id: "6734f8294b3b7ed5f8174cea" }); // Find a person by their ID
+    const person = await Person.findById({ _id: personId }); // Find a person by their ID
     console.log("Found person by ID:", person); // Log the found person
   } catch (error) {
     console.error(error); // Log any errors
@@ -145,15 +145,15 @@ async function findById() {
 }
 
 // Function to find a person by their ID and update their favorite foods
-async function findOneByIdAndUpdate() {
+async function findOneByIdAndUpdate(personId) {
   try {
-    const person = await Person.findById({ _id: "6734f8294b3b7ed5f8174ce8" }); // Find a person by their ID
+    const person = await Person.findById({ _id: personId }); // Find a person by their ID
     person.favoriteFoods.push("Hamburger"); // Add a new favorite food
 
     const updatedPerson = await person.save(); // Save the updated person object
     console.log("Update person by ID:", updatedPerson); // Log the updated person
-  } catch (err) {
-    console.error(err); // Log any errors
+  } catch (error) {
+    console.error(error); // Log any errors
   }
 }
 
@@ -176,11 +176,11 @@ async function findOnePersonAndUpdate() {
 }
 
 // Function to find a person by their ID and delete them
-async function findPersonByIdAndDelete() {
+async function findPersonByIdAndDelete(personId) {
   try {
     // Find the person by their ID and delete them from the database
     const deletedPerson = await Person.findByIdAndDelete({
-      _id: "6734f8294b3b7ed5f8174cea", // Specify the ID of the person to delete
+      _id: personId, // Specify the ID of the person to delete
     });
 
     // Log the deleted person object
