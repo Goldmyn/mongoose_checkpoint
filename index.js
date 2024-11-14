@@ -115,7 +115,7 @@ async function manyUser() {
 // Function to find people by name from the database
 async function findPeopleByName() {
   try {
-    const people = await Person.find({ name: new RegExp("Mandy Kugo", "i") }); // Find people with the given name
+    const people = await Person.find({ name: new RegExp("Mandy Kugo", "i") }); // Find people with the given name case insensitive
     console.log(people); // Log the found people
   } catch (error) {
     console.error("Error finding people by name:", error); // Log any errors
@@ -126,7 +126,7 @@ async function findPeopleByName() {
 async function findOneByFavoriteFood(food) {
   try {
     const person = await Person.findOne({
-      favoriteFoods: new RegExp(food, "i"), // Use the food argument for the search
+      favoriteFoods: new RegExp(food, "i"), // Use the food argument for the search case insensitive
     }); // Find a person by a specific favorite food
     console.log(person); // Log the found person
   } catch (error) {
@@ -211,7 +211,7 @@ async function findPeopleWhoLikeBurritos() {
   try {
     const results = await Person.find({
       favoriteFoods: new RegExp("burritos", "i"),
-    }) // Find people who like burritos
+    }) // Find people who like burritos case insensitive
       .sort({ name: 1 }) // Sort by name in ascending order
       .limit(2) // Limit the results to 2
       .select("-age"); // Only select the name field while excluding the age field
